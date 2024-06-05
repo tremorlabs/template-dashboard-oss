@@ -17,7 +17,7 @@ and [Next.js](https://nextjs.org).
 
 <br />
 
-[![Tremor Banner](public/og_github.jpg)](https://dashboard.tremor.so/overview)
+[![Tremor Banner](public/og_github.jpg)](https://dashboard-oss.tremor.so/overview)
 
 </div>
 
@@ -66,7 +66,6 @@ the resources listed below:
 - [Next.js](https://nextjs.org/docs) - Next.js documentation
 - [Radix UI](https://www.radix-ui.com) - Radix UI Website
 - [Recharts](https://recharts.org) - Recharts documentation and website
-- [Tanstack](https://tanstack.com/table/latest) - TanStack table documentation
 
 ---
 
