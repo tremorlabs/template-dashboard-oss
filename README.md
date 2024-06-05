@@ -17,7 +17,7 @@ and [Next.js](https://nextjs.org).
 
 <br />
 
-[![Tremor Banner](public/images/og_github.jpg)](https://dashboard.tremor.so/overview)
+[![Tremor Banner](public/og_github.jpg)](https://dashboard.tremor.so/overview)
 
 </div>
 
