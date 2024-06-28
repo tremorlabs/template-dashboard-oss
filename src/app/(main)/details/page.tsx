@@ -2,7 +2,6 @@ import { siteConfig } from "@/app/siteConfig"
 import { Button } from "@/components/Button"
 import { ArrowAnimated } from "@/components/ui/icons/ArrowAnimated"
 import { TremorPlaceholder } from "@/components/ui/icons/TremorPlaceholder"
-import Link from "next/link"
 
 export default function Example() {
   return (
@@ -21,13 +20,13 @@ export default function Example() {
             Ideal for providing analytics to your users.
           </p>
           <Button className="group mt-6" variant="secondary" asChild>
-            <Link href={siteConfig.externalLink.blocks}>
+            <a href={siteConfig.externalLink.blocks}>
               Get full template here
               <ArrowAnimated
                 className="stroke-gray-900 dark:stroke-gray-50"
                 aria-hidden="true"
               />
-            </Link>
+            </a>
           </Button>
         </div>
       </div>

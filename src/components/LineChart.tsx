@@ -395,7 +395,6 @@ interface ChartTooltipProps {
 const OverviewChartTooltip = ({
   active,
   payload,
-  label,
   categoryColors,
   valueFormatter,
 }: ChartTooltipProps) => {
@@ -455,71 +454,6 @@ const OverviewChartTooltip = ({
               />
             )
           })}
-        </div>
-      </div>
-    )
-  }
-  return null
-}
-
-// Standard tooltip below without percentage change logic
-
-const ChartTooltip = ({
-  active,
-  payload,
-  label,
-  categoryColors,
-  valueFormatter,
-}: ChartTooltipProps) => {
-  if (active && payload) {
-    const filteredPayload = payload.filter((item: any) => item.type !== "none")
-
-    return (
-      <div
-        className={cx(
-          // base
-          "rounded-md border text-xs shadow-md",
-          // border color
-          "border-gray-200 dark:border-gray-800",
-          // background color
-          "bg-white dark:bg-gray-950",
-        )}
-      >
-        <div
-          className={cx(
-            // base
-            "border-b border-inherit px-2 py-1",
-          )}
-        >
-          <p
-            className={cx(
-              // base
-              "font-medium",
-              // text color
-              "text-gray-900 dark:text-gray-50",
-            )}
-          >
-            {label}
-          </p>
-        </div>
-
-        <div className={cx("space-y-1 px-2 py-1")}>
-          {filteredPayload.map(
-            (
-              { value, name }: { value: number; name: string },
-              index: number,
-            ) => (
-              <ChartTooltipRow
-                key={`id-${index}`}
-                value={valueFormatter(value)}
-                name={name}
-                color={getColorClassName(
-                  categoryColors.get(name) as AvailableChartColorsKeys,
-                  "bg",
-                )}
-              />
-            ),
-          )}
         </div>
       </div>
     )
