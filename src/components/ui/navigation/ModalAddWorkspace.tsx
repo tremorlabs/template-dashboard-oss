@@ -13,11 +13,7 @@ import {
 import { DropdownMenuItem } from "@/components/Dropdown"
 import { Input } from "@/components/Input"
 import { Label } from "@/components/Label"
-import {
-  RadioCardGroup,
-  RadioCardGroupIndicator,
-  RadioCardItem,
-} from "@/components/RadioCard"
+import { RadioCardGroup, RadioCardItem } from "@/components/RadioCard"
 import {
   Select,
   SelectContent,
@@ -157,7 +153,6 @@ export function ModalAddWorkspace({
                   {databases.map((database) => (
                     <RadioCardItem key={database.value} value={database.value}>
                       <div className="flex items-start gap-3">
-                        <RadioCardGroupIndicator className="mt-0.5" />
                         <div>
                           {database.isRecommended ? (
                             <div className="flex items-center gap-2">

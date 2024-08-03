@@ -1,7 +1,7 @@
 // Tremor Raw Dialog [v0.0.0]
 
 import * as DialogPrimitives from "@radix-ui/react-dialog"
-import * as React from "react"
+import React from "react"
 
 import { cx, focusRing } from "@/lib/utils"
 

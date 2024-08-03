@@ -1,6 +1,6 @@
-// Tremor Raw ProgressBar [v0.0.0]
+// Tremor Raw ProgressBar [v0.0.1]
 
-import * as React from "react"
+import React from "react"
 import { tv, type VariantProps } from "tailwind-variants"
 
 import { cx } from "@/lib/utils"
@@ -79,10 +79,14 @@ const ProgressBar = React.forwardRef<HTMLDivElement, ProgressBarProps>(
           aria-valuemax={max}
         >
           <div
-            className={cx("h-full flex-col rounded-full", bar())}
+            className={cx(
+              "h-full flex-col rounded-full",
+              bar(),
+              showAnimation &&
+                "transform-gpu transition-all duration-300 ease-in-out",
+            )}
             style={{
               width: max ? `${(safeValue / max) * 100}%` : `${safeValue}%`,
-              transition: showAnimation ? "all 1s" : "",
             }}
           />
         </div>

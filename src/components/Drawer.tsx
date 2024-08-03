@@ -5,6 +5,7 @@ import { RiCloseLine } from "@remixicon/react"
 import * as React from "react"
 
 import { cx, focusRing } from "@/lib/utils"
+
 import { Button } from "./Button"
 
 const Drawer = (
@@ -49,7 +50,7 @@ const DrawerOverlay = React.forwardRef<
         // base
         "fixed inset-0 z-50 overflow-y-auto",
         // background color
-        "bg-black/70",
+        "bg-black/30",
         // transition
         "data-[state=closed]:animate-hide data-[state=open]:animate-dialogOverlayShow",
         className,
@@ -82,7 +83,7 @@ const DrawerContent = React.forwardRef<
             // background color
             "bg-white dark:bg-[#090E1A]",
             // transition
-            "data-[state=open]:animate-drawerSlideLeftAndFade",
+            "data-[state=closed]:animate-drawerSlideRightAndFade data-[state=open]:animate-drawerSlideLeftAndFade",
             focusRing,
             className,
           )}
@@ -147,6 +148,7 @@ const DrawerBody = React.forwardRef<
 >(({ className, ...props }, ref) => {
   return <div ref={ref} className={cx("flex-1 py-4", className)} {...props} />
 })
+
 DrawerBody.displayName = "Drawer.Body"
 
 const DrawerDescription = React.forwardRef<
@@ -171,7 +173,7 @@ const DrawerFooter = ({
   return (
     <div
       className={cx(
-        "flex flex-col-reverse border-t pt-4 sm:flex-row sm:justify-end sm:space-x-2",
+        "flex flex-col-reverse border-t border-gray-200 pt-4 sm:flex-row sm:justify-end sm:space-x-2 dark:border-gray-900",
         className,
       )}
       {...props}

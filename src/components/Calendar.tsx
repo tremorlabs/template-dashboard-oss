@@ -1,4 +1,4 @@
-// Tremor Raw Calendar [v0.0.1]
+// Tremor Raw Calendar [v0.0.4]
 
 "use client"
 
@@ -50,7 +50,7 @@ const NavigationButton = React.forwardRef<
           "text-gray-600 hover:text-gray-800",
           "dark:text-gray-400 hover:dark:text-gray-200",
           // border color
-          "border-gray-300 dark:border-gray-700",
+          "border-gray-300 dark:border-gray-800",
           // background color
           "hover:bg-gray-50 active:bg-gray-100",
           "hover:dark:bg-gray-900 active:dark:bg-gray-800",
@@ -108,7 +108,7 @@ const Calendar = ({
       weekStartsOn={weekStartsOn}
       numberOfMonths={numberOfMonths}
       locale={locale}
-      showOutsideDays={numberOfMonths === 1 ? true : false}
+      showOutsideDays={numberOfMonths === 1}
       className={cx(className)}
       classNames={{
         months: "flex space-y-0",

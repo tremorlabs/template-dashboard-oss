@@ -3,6 +3,12 @@
 export type ColorUtility = "bg" | "stroke" | "fill" | "text"
 
 export const chartColors = {
+  indigo: {
+    bg: "bg-indigo-600 dark:bg-indigo-500",
+    stroke: "stroke-indigo-600 dark:stroke-indigo-500",
+    fill: "fill-indigo-600 dark:fill-indigo-500",
+    text: "text-indigo-600 dark:text-indigo-500",
+  },
   blue: {
     bg: "bg-blue-500",
     stroke: "stroke-blue-500",
@@ -28,22 +34,16 @@ export const chartColors = {
     text: "text-amber-500",
   },
   gray: {
-    bg: "bg-gray-400 dark:bg-gray-600",
-    stroke: "stroke-gray-400 dark:stroke-gray-600",
-    fill: "fill-gray-400 dark:fill-gray-600",
-    text: "text-gray-400 dark:text-gray-600",
+    bg: "bg-gray-500",
+    stroke: "stroke-gray-500",
+    fill: "fill-gray-500",
+    text: "text-gray-500",
   },
   cyan: {
     bg: "bg-cyan-500",
     stroke: "stroke-cyan-500",
     fill: "fill-cyan-500",
     text: "text-cyan-500",
-  },
-  indigo: {
-    bg: "bg-indigo-600 dark:bg-indigo-500",
-    stroke: "stroke-indigo-600 dark:stroke-indigo-500",
-    fill: "fill-indigo-600 dark:fill-indigo-500",
-    text: "text-indigo-600 dark:text-indigo-500",
   },
   pink: {
     bg: "bg-pink-500",
@@ -94,7 +94,7 @@ export const getYAxisDomain = (
   minValue: number | undefined,
   maxValue: number | undefined,
 ) => {
-  const minDomain = autoMinValue ? "auto" : minValue ?? 0
+  const minDomain = autoMinValue ? "auto" : (minValue ?? 0)
   const maxDomain = maxValue ?? "auto"
   return [minDomain, maxDomain]
 }

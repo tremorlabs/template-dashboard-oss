@@ -1,4 +1,4 @@
-// Tremor Raw Button [v0.0.0]
+// Tremor Raw Button [v0.1.1]
 
 import { Slot } from "@radix-ui/react-slot"
 import { RiLoader2Fill } from "@remixicon/react"
@@ -10,7 +10,7 @@ import { cx, focusRing } from "@/lib/utils"
 const buttonVariants = tv({
   base: [
     // base
-    "relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-1.5 text-center text-base font-medium shadow-sm transition-all duration-100 ease-in-out sm:text-sm",
+    "relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-sm transition-all duration-100 ease-in-out sm:text-sm",
     // disabled
     "disabled:pointer-events-none disabled:shadow-none",
     // focus
@@ -22,14 +22,14 @@ const buttonVariants = tv({
         // border
         "border-transparent",
         // text color
-        "text-white dark:text-gray-50",
+        "text-white dark:text-gray-900",
         // background color
-        "bg-indigo-600 dark:bg-indigo-500",
+        "bg-gray-900 dark:bg-gray-50",
         // hover color
-        "hover:bg-indigo-500 dark:hover:bg-indigo-600",
+        "hover:bg-gray-800 dark:hover:bg-gray-200",
         // disabled
-        "disabled:bg-indigo-100 disabled:text-gray-400",
-        "disabled:dark:bg-indigo-800 disabled:dark:text-indigo-400",
+        "disabled:bg-gray-100 disabled:text-gray-400",
+        "disabled:dark:bg-gray-800 disabled:dark:text-gray-600",
       ],
       secondary: [
         // border
@@ -66,9 +66,11 @@ const buttonVariants = tv({
         "border-transparent",
         // text color
         "text-gray-900 dark:text-gray-50",
+        // hover color
+        "bg-transparent hover:bg-gray-100 dark:hover:bg-gray-800/80",
         // disabled
-        "disabled:bg-gray-100 disabled:text-gray-400",
-        "disabled:dark:bg-gray-800 disabled:dark:text-gray-600",
+        "disabled:text-gray-400",
+        "disabled:dark:text-gray-600",
       ],
       destructive: [
         // text color

@@ -33,9 +33,9 @@ export const metadata: Metadata = {
     siteName: siteConfig.name,
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "Tremor OSS Dashboard",
-    creator: '@tremorlabs',
+    creator: "@tremorlabs",
   },
   icons: {
     icon: "/favicon.ico",
