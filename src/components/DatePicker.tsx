@@ -1,4 +1,4 @@
-// Tremor Raw Date Picker [v1.0.0]
+// Tremor Date Picker [v1.0.5]
 
 "use client"
 
@@ -19,7 +19,7 @@ import { RiCalendar2Fill, RiSubtractFill } from "@remixicon/react"
 import { format, type Locale } from "date-fns"
 import { enUS } from "date-fns/locale"
 import * as React from "react"
-import { VariantProps, tv } from "tailwind-variants"
+import { tv, VariantProps } from "tailwind-variants"
 
 import { cx, focusInput, focusRing, hasErrorInput } from "@/lib/utils"
 
@@ -51,7 +51,7 @@ const TimeSegment = ({ segment, state }: TimeSegmentProps) => {
   const { segmentProps } = useDateSegment(segment, state, ref)
 
   const isColon = segment.type === "literal" && segment.text === ":"
-  const isSpace = segment.type === "literal" && segment.text === " "
+  const isSpace = segment.type === "literal" && segment.text === " "
 
   const isDecorator = isColon || isSpace
 
@@ -61,9 +61,9 @@ const TimeSegment = ({ segment, state }: TimeSegmentProps) => {
       ref={ref}
       className={cx(
         // base
-        "relative block w-full appearance-none rounded-md border px-2.5 py-1.5 text-left uppercase tabular-nums shadow-sm outline-none sm:text-sm",
+        "relative block w-full appearance-none rounded-md border px-2.5 py-1.5 text-left uppercase tabular-nums shadow-sm outline-none transition sm:text-sm",
         // border color
-        "border-gray-200 dark:border-gray-800",
+        "border-gray-300 dark:border-gray-800",
         // text color
         "text-gray-900 dark:text-gray-50",
         // background color
@@ -76,7 +76,7 @@ const TimeSegment = ({ segment, state }: TimeSegmentProps) => {
           "!w-fit border-none bg-transparent px-0 text-gray-400 shadow-none":
             isDecorator,
           hidden: isSpace,
-          "border-gray-200 bg-gray-100 text-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500":
+          "border-gray-300 bg-gray-100 text-gray-400 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-500":
             state.isDisabled,
           "!bg-transparent !text-gray-400": !segment.isEditable,
         },
@@ -94,7 +94,7 @@ const TimeSegment = ({ segment, state }: TimeSegmentProps) => {
       >
         {segment.placeholder}
       </span>
-      {segment.isPlaceholder ? "" : segment.text}
+      {segment.isPlaceholder ? " " : segment.text}
     </div>
   )
 }
@@ -154,7 +154,7 @@ TimeInput.displayName = "TimeInput"
 const triggerStyles = tv({
   base: [
     // base
-    "peer flex w-full cursor-pointer appearance-none items-center gap-x-2 truncate rounded-md border px-2 py-1.5 shadow-sm outline-none transition-all sm:py-1 sm:text-sm",
+    "peer flex w-full cursor-pointer appearance-none items-center gap-x-2 truncate rounded-md border px-3 py-2 shadow-sm outline-none transition-all sm:text-sm",
     // background color
     "bg-white dark:bg-gray-950",
     // border color
@@ -199,7 +199,7 @@ const Trigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
           className={cx(triggerStyles({ hasError }), className)}
           {...props}
         >
-          <RiCalendar2Fill className="size-4 shrink-0 text-gray-400 dark:text-gray-600" />
+          <RiCalendar2Fill className="size-5 shrink-0 text-gray-400 dark:text-gray-600" />
           <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap text-left text-gray-900 dark:text-gray-50">
             {children ? (
               children
@@ -261,7 +261,7 @@ CalendarPopover.displayName = "DatePicker.CalendarPopover"
 //#region Preset
 // ============================================================================
 
-export type DateRange = {
+type DateRange = {
   from: Date | undefined
   to?: Date | undefined
 }
@@ -295,7 +295,6 @@ const PresetContainer = <TPreset extends Preset, TValue>({
   const isDateRangePresets = (preset: any): preset is DateRangePreset => {
     return "dateRange" in preset
   }
-
   const isDatePresets = (preset: any): preset is DatePreset => {
     return "date" in preset
   }
@@ -361,7 +360,7 @@ const PresetContainer = <TPreset extends Preset, TValue>({
   }
 
   return (
-    <ul role="list" className="flex items-start gap-x-2 sm:flex-col">
+    <ul className="flex items-start gap-x-2 sm:flex-col">
       {presets.map((preset, index) => {
         return (
           <li key={index} className="sm:w-full sm:py-px">
@@ -494,7 +493,7 @@ const SingleDatePicker = ({
   )
   const [month, setMonth] = React.useState<Date | undefined>(date)
 
-  const [time, setTime] = React.useState<TimeValue>(
+  const [time, setTime] = React.useState<TimeValue | null>(
     value
       ? new Time(value.getHours(), value.getMinutes())
       : defaultValue
@@ -556,7 +555,7 @@ const SingleDatePicker = ({
     setDate(newDate)
   }
 
-  const onTimeChange = (time: TimeValue) => {
+  const onTimeChange = (time: TimeValue | null) => {
     setTime(time)
 
     if (!date) {
@@ -601,7 +600,11 @@ const SingleDatePicker = ({
   }, [value, defaultValue])
 
   return (
-    <PopoverPrimitives.Root open={open} onOpenChange={onOpenChange}>
+    <PopoverPrimitives.Root
+      tremor-id="tremor-raw"
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       <Trigger
         placeholder={placeholder}
         disabled={disabled}
@@ -719,14 +722,14 @@ const RangeDatePicker = ({
   )
   const [month, setMonth] = React.useState<Date | undefined>(range?.from)
 
-  const [startTime, setStartTime] = React.useState<TimeValue>(
+  const [startTime, setStartTime] = React.useState<TimeValue | null>(
     value?.from
       ? new Time(value.from.getHours(), value.from.getMinutes())
       : defaultValue?.from
         ? new Time(defaultValue.from.getHours(), defaultValue.from.getMinutes())
         : new Time(0, 0),
   )
-  const [endTime, setEndTime] = React.useState<TimeValue>(
+  const [endTime, setEndTime] = React.useState<TimeValue | null>(
     value?.to
       ? new Time(value.to.getHours(), value.to.getMinutes())
       : defaultValue?.to
@@ -804,7 +807,7 @@ const RangeDatePicker = ({
     setOpen(open)
   }
 
-  const onTimeChange = (time: TimeValue, pos: "start" | "end") => {
+  const onTimeChange = (time: TimeValue | null, pos: "start" | "end") => {
     switch (pos) {
       case "start":
         setStartTime(time)
@@ -888,9 +891,9 @@ const RangeDatePicker = ({
       return null
     }
 
-    return `${
-      range.from ? formatDate(range.from, locale, showTimePicker) : ""
-    } - ${range.to ? formatDate(range.to, locale, showTimePicker) : ""}`
+    return `${range.from ? formatDate(range.from, locale, showTimePicker) : ""} - ${
+      range.to ? formatDate(range.to, locale, showTimePicker) : ""
+    }`
   }, [range, locale, showTimePicker])
 
   const onApply = () => {
@@ -899,7 +902,11 @@ const RangeDatePicker = ({
   }
 
   return (
-    <PopoverPrimitives.Root open={open} onOpenChange={onOpenChange}>
+    <PopoverPrimitives.Root
+      tremor-id="tremor-raw"
+      open={open}
+      onOpenChange={onOpenChange}
+    >
       <Trigger
         placeholder={placeholder}
         disabled={disabled}
@@ -932,7 +939,7 @@ const RangeDatePicker = ({
                 </div>
               </div>
             )}
-            <div>
+            <div className="overflow-x-auto">
               <CalendarPrimitive
                 mode="range"
                 selected={range}
@@ -998,7 +1005,7 @@ const RangeDatePicker = ({
                   </Button>
                   <Button
                     variant="primary"
-                    className="h-8 w-full bg-indigo-600 sm:w-fit"
+                    className="h-8 w-full sm:w-fit"
                     type="button"
                     onClick={onApply}
                   >
@@ -1195,4 +1202,10 @@ const DateRangePicker = ({ presets, ...props }: RangeDatePickerProps) => {
 
 DateRangePicker.displayName = "DateRangePicker"
 
-export { DatePicker, DateRangePicker, type DatePreset, type DateRangePreset }
+export {
+  DatePicker,
+  DateRangePicker,
+  type DatePreset,
+  type DateRange,
+  type DateRangePreset,
+}
