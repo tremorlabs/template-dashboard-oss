@@ -12,18 +12,29 @@ import {
 import { cx, focusInput } from "@/lib/utils"
 import { RiArrowRightSLine, RiExpandUpDownLine } from "@remixicon/react"
 import React from "react"
+import { AlmatonIcon } from "../icons/AlmatonLogo"
 import { ModalAddWorkspace } from "./ModalAddWorkspace"
 
 const workspaces = [
   {
     value: "retail-analytics",
     name: "Retail analytics",
-    initials: "RA",
     role: "Member",
-    color: "bg-indigo-600 dark:bg-indigo-500",
   },
   // Add more workspaces...
 ]
+
+const WorkspaceLogo = ({ className }: { className?: string }) => (
+  <span
+    className={cx(
+      "flex aspect-square shrink-0 items-center justify-center rounded border border-gray-200 bg-white p-1 dark:border-gray-800",
+      className,
+    )}
+    aria-hidden="true"
+  >
+    <AlmatonIcon className="h-full w-full" />
+  </span>
+)
 
 export const WorkspacesDropdownDesktop = () => {
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
@@ -56,12 +67,7 @@ export const WorkspacesDropdownDesktop = () => {
               focusInput,
             )}
           >
-            <span
-              className="flex aspect-square size-8 items-center justify-center rounded bg-indigo-600 p-2 text-xs font-medium text-white dark:bg-indigo-500"
-              aria-hidden="true"
-            >
-              RA
-            </span>
+            <WorkspaceLogo className="size-8" />
             <div className="flex w-full items-center justify-between gap-x-4 truncate">
               <div className="truncate">
                 <p className="truncate whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-50">
@@ -95,15 +101,7 @@ export const WorkspacesDropdownDesktop = () => {
             {workspaces.map((workspace) => (
               <DropdownMenuItem key={workspace.value}>
                 <div className="flex w-full items-center gap-x-2.5">
-                  <span
-                    className={cx(
-                      workspace.color,
-                      "flex aspect-square size-8 items-center justify-center rounded p-2 text-xs font-medium text-white",
-                    )}
-                    aria-hidden="true"
-                  >
-                    {workspace.initials}
-                  </span>
+                  <WorkspaceLogo className="size-8" />
                   <div>
                     <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                       {workspace.name}
@@ -154,14 +152,7 @@ export const WorkspacesDropdownMobile = () => {
       >
         <DropdownMenuTrigger asChild>
           <button className="flex items-center gap-x-1.5 rounded-md p-2 hover:bg-gray-100 focus:outline-none hover:dark:bg-gray-900">
-            <span
-              className={cx(
-                "flex aspect-square size-7 items-center justify-center rounded bg-indigo-600 p-2 text-xs font-medium text-white dark:bg-indigo-500",
-              )}
-              aria-hidden="true"
-            >
-              RA
-            </span>
+            <WorkspaceLogo className="size-7" />
             <RiArrowRightSLine
               className="size-4 shrink-0 text-gray-500"
               aria-hidden="true"
@@ -195,15 +186,7 @@ export const WorkspacesDropdownMobile = () => {
             {workspaces.map((workspace) => (
               <DropdownMenuItem key={workspace.value}>
                 <div className="flex w-full items-center gap-x-2.5">
-                  <span
-                    className={cx(
-                      workspace.color,
-                      "flex size-8 items-center justify-center rounded p-2 text-xs font-medium text-white",
-                    )}
-                    aria-hidden="true"
-                  >
-                    {workspace.initials}
-                  </span>
+                  <WorkspaceLogo className="size-8" />
                   <div>
                     <p className="text-sm font-medium text-gray-900 dark:text-gray-50">
                       {workspace.name}

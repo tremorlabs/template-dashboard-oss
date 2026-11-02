@@ -1,14 +1,14 @@
 import { Button } from "@/components/Button"
 import { RiArrowRightLine } from "@remixicon/react"
+import { AlmatonLogo } from "@/components/ui/icons/AlmatonLogo"
 import Link from "next/link"
-import { DatabaseLogo } from "../../public/DatabaseLogo"
 import { siteConfig } from "./siteConfig"
 
 export default function NotFound() {
   return (
     <div className="flex h-screen flex-col items-center justify-center">
       <Link href={siteConfig.baseLinks.home}>
-        <DatabaseLogo className="mt-6 h-10" />
+        <AlmatonLogo alt={siteConfig.name} priority className="mt-6 h-10" />
       </Link>
       <p className="mt-6 text-4xl font-semibold text-indigo-600 sm:text-5xl dark:text-indigo-500">
         404

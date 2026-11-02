@@ -37,9 +37,6 @@ export const metadata: Metadata = {
     title: "Tremor OSS Dashboard",
     creator: "@tremorlabs",
   },
-  icons: {
-    icon: "/almatonFavicon.ico",
-  },
 }
 
 export default function RootLayout({

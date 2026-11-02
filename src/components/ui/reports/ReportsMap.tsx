@@ -3,36 +3,48 @@
 import type { ReportLocation } from "@/data/reports/data"
 import { cx, focusRing } from "@/lib/utils"
 import { RiFullscreenExitLine, RiFullscreenLine } from "@remixicon/react"
-import L from "leaflet"
-import "leaflet/dist/leaflet.css"
+import {
+  AdvancedMarker,
+  AdvancedMarkerAnchorPoint,
+  APIProvider,
+  ColorScheme,
+  Map,
+  useMap,
+} from "@vis.gl/react-google-maps"
+import { useTheme } from "next-themes"
 import React from "react"
-import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet"
 
-const MEXICO_BOUNDS: L.LatLngBoundsLiteral = [
-  [14.5, -117.5],
-  [32.7, -86.7],
-]
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ""
+// DEMO_MAP_ID is provided by Google and enables advanced markers without extra setup
+const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || "DEMO_MAP_ID"
+
+const MEXICO_BOUNDS = {
+  north: 32.7,
+  south: 14.5,
+  west: -117.5,
+  east: -86.7,
+}
 const SELECTED_ZOOM = 7
 
-const TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-
-const createPin = ({ count }: ReportLocation) =>
-  L.divIcon({
-    className: "",
-    iconSize: [0, 0],
-    html: `<div class="flex w-max -translate-x-1/2 -translate-y-1/2 items-center gap-1.5 rounded-md bg-white px-1.5 py-1 text-xs font-semibold tabular-nums text-gray-900 shadow-md ring-1 ring-black/5 dark:bg-gray-900 dark:text-gray-50 dark:ring-white/10"><span class="size-2 rounded-full bg-emerald-600"></span>${count}</div>`,
-  })
+function Pin({ count }: Pick<ReportLocation, "count">) {
+  return (
+    <div className="flex w-max items-center gap-1.5 rounded-md bg-white px-1.5 py-1 text-xs font-semibold tabular-nums text-gray-900 shadow-md ring-1 ring-black/5 dark:bg-gray-900 dark:text-gray-50 dark:ring-white/10">
+      <span className="size-2 rounded-full bg-emerald-600" />
+      {count}
+    </div>
+  )
+}
 
 function FlyToSelection({ lat, lng }: { lat?: number; lng?: number }) {
   const map = useMap()
 
   React.useEffect(() => {
+    if (!map) return
     if (lat !== undefined && lng !== undefined) {
-      map.flyTo([lat, lng], SELECTED_ZOOM)
+      map.panTo({ lat, lng })
+      map.setZoom(SELECTED_ZOOM)
     } else {
-      map.flyToBounds(MEXICO_BOUNDS)
+      map.fitBounds(MEXICO_BOUNDS)
     }
   }, [map, lat, lng])
 
@@ -52,6 +64,9 @@ export function ReportsMap({
 }: ReportsMapProps) {
   const containerRef = React.useRef<HTMLDivElement>(null)
   const [isFullscreen, setIsFullscreen] = React.useState(false)
+  const { resolvedTheme } = useTheme()
+  const colorScheme =
+    resolvedTheme === "dark" ? ColorScheme.DARK : ColorScheme.LIGHT
 
   React.useEffect(() => {
     const onChange = () =>
@@ -68,32 +83,47 @@ export function ReportsMap({
     }
   }
 
+  if (!API_KEY) {
+    return (
+      <div className="flex h-full w-full items-center justify-center bg-gray-100 p-4 text-center text-sm text-gray-500 dark:bg-gray-900 dark:text-gray-400">
+        Add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to .env.local to show the map.
+      </div>
+    )
+  }
+
   const FullscreenIcon = isFullscreen ? RiFullscreenExitLine : RiFullscreenLine
   const selected = locations.find(({ id }) => id === selectedId)
 
   return (
     <div ref={containerRef} className="relative isolate h-full w-full">
-      <MapContainer
-        bounds={MEXICO_BOUNDS}
-        minZoom={3}
-        zoomSnap={0.25}
-        scrollWheelZoom={false}
-        className="h-full w-full bg-gray-100 dark:bg-gray-900 dark:[&_.leaflet-tile-pane]:[filter:invert(1)_hue-rotate(180deg)_brightness(0.9)]"
-      >
-        <TileLayer url={TILE_URL} attribution={TILE_ATTRIBUTION} />
-        {locations.map((location, index) => (
-          <Marker
-            key={location.id}
-            zIndexOffset={(locations.length - index) * 1000}
-            position={[location.lat, location.lng]}
-            icon={createPin(location)}
-            title={location.name}
-            riseOnHover
-            eventHandlers={{ click: () => onSelect(location.id) }}
-          />
-        ))}
-        <FlyToSelection lat={selected?.lat} lng={selected?.lng} />
-      </MapContainer>
+      <APIProvider apiKey={API_KEY}>
+        <Map
+          // colorScheme is only read on init, so remount when the theme changes
+          key={colorScheme}
+          mapId={MAP_ID}
+          colorScheme={colorScheme}
+          defaultBounds={MEXICO_BOUNDS}
+          minZoom={3}
+          gestureHandling="cooperative"
+          disableDefaultUI
+          zoomControl
+          className="h-full w-full bg-gray-100 dark:bg-gray-900"
+        >
+          {locations.map((location, index) => (
+            <AdvancedMarker
+              key={location.id}
+              position={{ lat: location.lat, lng: location.lng }}
+              anchorPoint={AdvancedMarkerAnchorPoint.CENTER}
+              zIndex={locations.length - index}
+              title={location.name}
+              onClick={() => onSelect(location.id)}
+            >
+              <Pin count={location.count} />
+            </AdvancedMarker>
+          ))}
+          <FlyToSelection lat={selected?.lat} lng={selected?.lng} />
+        </Map>
+      </APIProvider>
       <button
         type="button"
         aria-label={isFullscreen ? "Exit fullscreen" : "View map fullscreen"}
