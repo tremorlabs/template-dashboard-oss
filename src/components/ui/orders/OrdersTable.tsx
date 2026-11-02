@@ -35,6 +35,7 @@ import {
   statuses,
   type Ticket,
 } from "@/data/support/schema"
+import { useFitHeight } from "@/lib/useFitHeight"
 import { cx } from "@/lib/utils"
 import {
   RiArrowDownSFill,
@@ -47,7 +48,13 @@ import {
 import { format } from "date-fns"
 import React from "react"
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 20
+
+// sticky header/footer
+const stickyHeadCell =
+  "sticky top-0 z-10 border-b-0 bg-white shadow-[inset_0_-1px_0] shadow-gray-200 dark:bg-gray-950 dark:shadow-gray-800"
+const stickyFootCell =
+  "sticky bottom-0 z-10 border-b-0 bg-white shadow-[inset_0_1px_0] shadow-gray-200 dark:bg-gray-950 dark:shadow-gray-800"
 
 const columns: {
   header: string
@@ -140,6 +147,14 @@ export function OrdersTable({
   })
   const [pageIndex, setPageIndex] = React.useState(0)
   const [selected, setSelected] = React.useState<Set<string>>(new Set())
+  const sectionRef = React.useRef<HTMLElement>(null)
+  const scrollRef = React.useRef<HTMLDivElement>(null)
+  const maxHeight = useFitHeight(sectionRef, scrollRef)
+
+  // reset scroll on page change
+  React.useEffect(() => {
+    scrollRef.current?.firstElementChild?.scrollTo({ top: 0 })
+  }, [pageIndex, sorting])
 
   const pageCount = Math.max(1, Math.ceil(tickets.length / PAGE_SIZE))
 
@@ -149,13 +164,15 @@ export function OrdersTable({
     setSelected(new Set())
   }, [tickets, pageCount])
 
-  const rows = React.useMemo(() => {
+  const sorted = React.useMemo(() => {
     const { sortValue } = columns[sorting.column]
     const sign = sorting.desc ? -1 : 1
-    return [...tickets]
-      .sort((a, b) => (sortValue(a) > sortValue(b) ? 1 : -1) * sign)
-      .slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE)
-  }, [tickets, sorting, pageIndex])
+    return [...tickets].sort(
+      (a, b) => (sortValue(a) > sortValue(b) ? 1 : -1) * sign,
+    )
+  }, [tickets, sorting])
+
+  const rows = sorted.slice(pageIndex * PAGE_SIZE, (pageIndex + 1) * PAGE_SIZE)
 
   const allIds = tickets.map(getTicketId)
   const pageIds = rows.map(getTicketId)
@@ -189,12 +206,15 @@ export function OrdersTable({
   ]
 
   return (
-    <section>
-      <TableRoot>
+    <section ref={sectionRef}>
+      <TableRoot ref={scrollRef} style={{ maxHeight }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableHeaderCell scope="col" className="w-0">
+              <TableHeaderCell
+                scope="col"
+                className={cx("w-0", stickyHeadCell)}
+              >
                 <IndeterminateCheckbox
                   aria-label="Select all orders"
                   checked={allIds.length > 0 && selected.size === allIds.length}
@@ -208,7 +228,7 @@ export function OrdersTable({
                   <TableHeaderCell
                     key={column.header}
                     scope="col"
-                    className="cursor-pointer select-none"
+                    className={cx("cursor-pointer select-none", stickyHeadCell)}
                     onClick={() => toggleSorting(index)}
                     onKeyDown={(event) =>
                       event.key === "Enter" && toggleSorting(index)
@@ -278,7 +298,7 @@ export function OrdersTable({
           </TableBody>
           <TableFoot>
             <TableRow>
-              <TableHeaderCell>
+              <TableHeaderCell className={stickyFootCell}>
                 <IndeterminateCheckbox
                   aria-label="Select orders on this page"
                   checked={
@@ -290,7 +310,7 @@ export function OrdersTable({
               </TableHeaderCell>
               <TableHeaderCell
                 colSpan={columns.length}
-                className="font-normal tabular-nums"
+                className={cx("font-normal tabular-nums", stickyFootCell)}
               >
                 {pageSelectedCount} of {pageIds.length} page row(s) selected
               </TableHeaderCell>
@@ -367,7 +387,7 @@ export function OrdersTable({
           </div>
         </div>
       )}
-      <div className="mt-10 flex items-center justify-between">
+      <div className="mt-4 flex items-center justify-between">
         <p className="text-sm tabular-nums text-gray-500 dark:text-gray-500">
           Page{" "}
           <span className="font-medium text-gray-900 dark:text-gray-50">

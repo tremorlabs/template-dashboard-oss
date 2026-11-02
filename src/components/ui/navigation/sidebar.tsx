@@ -12,6 +12,8 @@ import {
   RiBox3Line,
   RiTruckLine,
   RiWebhookLine,
+  RiArrowGoBackLine,
+  RiBillLine,
 } from "@remixicon/react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -28,8 +30,10 @@ const navigation = [
   { name: "Orders", href: siteConfig.baseLinks.orders, icon: RiFileListLine},
   { name: "Inventory", href: siteConfig.baseLinks.inventory, icon: RiBox3Line },
   { name: "Shipments", href: siteConfig.baseLinks.shipments, icon: RiTruckLine },
+  { name: "Returns", href: siteConfig.baseLinks.returns, icon: RiArrowGoBackLine },
   { name: "Network", href: siteConfig.baseLinks.network, icon: RiGlobalLine },
   { name: "Reports", href: siteConfig.baseLinks.reports, icon: RiFolderChartLine },
+  { name: "Invoices", href: siteConfig.baseLinks.invoices, icon: RiBillLine },
   { name: "Integrations", href: siteConfig.baseLinks.integrations, icon: RiWebhookLine },
   {
     name: "Settings",

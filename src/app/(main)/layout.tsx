@@ -5,7 +5,7 @@ export default function Layout({
 }>) {
   return (
     <div className="relative">
-      <div className="p-4 sm:px-6 sm:pb-10 sm:pt-10 lg:px-6 lg:pt-7">
+      <div className="p-4 sm:px-6 sm:pb-4 sm:pt-10 lg:px-6 lg:pt-7">
         {children}
       </div>
     </div>

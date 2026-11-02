@@ -63,7 +63,7 @@ export function OrdersFilterbar({
       <DateRangePicker
         value={filters.dates}
         onChange={(dates) => update({ dates })}
-        className="w-full sm:w-fit"
+        className="h-8 w-full py-0 sm:w-fit sm:text-xs"
         fromDate={minDate}
         toDate={maxDate}
         align="end"
@@ -72,7 +72,7 @@ export function OrdersFilterbar({
         value={filters.status}
         onValueChange={(status) => update({ status })}
       >
-        <SelectTrigger className="w-full sm:w-44">
+        <SelectTrigger className="h-8 w-full py-0 sm:w-40 sm:text-xs">
           <SelectValue placeholder="Status" />
         </SelectTrigger>
         <SelectContent>
@@ -88,7 +88,7 @@ export function OrdersFilterbar({
         value={filters.priority}
         onValueChange={(priority) => update({ priority })}
       >
-        <SelectTrigger className="w-full sm:w-44">
+        <SelectTrigger className="h-8 w-full py-0 sm:w-40 sm:text-xs">
           <SelectValue placeholder="Priority" />
         </SelectTrigger>
         <SelectContent>
@@ -103,7 +103,7 @@ export function OrdersFilterbar({
       {isFiltered && (
         <Button
           variant="ghost"
-          className="w-full sm:w-fit"
+          className="h-8 w-full py-0 sm:w-fit sm:text-xs"
           onClick={() => onFiltersChange(emptyFilters)}
         >
           Reset

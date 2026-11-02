@@ -14,7 +14,7 @@ import {
 import { useTheme } from "next-themes"
 import React from "react"
 
-const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ""
+const API_KEY = process.env.GOOGLE_MAPS_API_KEY ?? ""
 // DEMO_MAP_ID is provided by Google and enables advanced markers without extra setup
 const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || "DEMO_MAP_ID"
 

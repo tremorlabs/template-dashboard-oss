@@ -29,17 +29,19 @@ export default function SupportDashboard() {
     [orders, filters],
   )
 
-  const updateStatus = (ids: string[], status: string) =>
+  const updateStatus = (ids: string[], status: string) => {
+    const idSet = new Set(ids)
     setOrders((prev) =>
       prev.map((order) =>
-        ids.includes(getTicketId(order)) ? { ...order, status } : order,
+        idSet.has(getTicketId(order)) ? { ...order, status } : order,
       ),
     )
+  }
 
-  const deleteOrders = (ids: string[]) =>
-    setOrders((prev) =>
-      prev.filter((order) => !ids.includes(getTicketId(order))),
-    )
+  const deleteOrders = (ids: string[]) => {
+    const idSet = new Set(ids)
+    setOrders((prev) => prev.filter((order) => !idSet.has(getTicketId(order))))
+  }
 
   return (
     <main>
