@@ -24,9 +24,9 @@ const buttonVariants = tv({
         // text color
         "text-white dark:text-gray-900",
         // background color
-        "bg-gray-900 dark:bg-gray-50",
+        "bg-indigo-600 dark:bg-gray-50",
         // hover color
-        "hover:bg-gray-800 dark:hover:bg-gray-200",
+        "hover:bg-indigo-700 dark:hover:bg-gray-200",
         // disabled
         "disabled:bg-gray-100 disabled:text-gray-400",
         "disabled:dark:bg-gray-800 disabled:dark:text-gray-600",

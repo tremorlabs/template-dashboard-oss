@@ -1,10 +1,33 @@
 import type { Config } from "tailwindcss"
 
+// light: Almaton palette, dark: original (see globals.css)
+const scale = (name: string) =>
+  Object.fromEntries(
+    [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].map((step) => [
+      step,
+      `rgb(var(--${name}-${step}) / <alpha-value>)`,
+    ]),
+  )
+
 const config: Config = {
   darkMode: "selector",
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
+      colors: {
+        almaton: {
+          navy: "#0A1F44",
+          royal: "#0066FF",
+          cyan: "#00C6FF",
+          light: "#60E0FF",
+          slate: "#94A3B8",
+          offwhite: "#F8FAFC",
+        },
+        gray: scale("gray"),
+        indigo: scale("indigo"),
+        blue: scale("blue"),
+        cyan: scale("cyan"),
+      },
       keyframes: {
         hide: {
           from: { opacity: "1" },
