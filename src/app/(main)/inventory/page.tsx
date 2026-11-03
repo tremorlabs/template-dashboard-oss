@@ -62,7 +62,11 @@ export default function InventoryPage() {
         <TicketDrawer open={isOpen} onOpenChange={setIsOpen} />
       </div>
       <Divider />
-      <InventoryKpiCards items={brandItems} />
+      <InventoryKpiCards
+        items={brandItems}
+        activeStatus={filters.status}
+        onSelectStatus={(status) => setFilters({ ...filters, status })}
+      />
       <div className="mt-6">
         <InventoryFilterbar filters={filters} onFiltersChange={setFilters} />
       </div>

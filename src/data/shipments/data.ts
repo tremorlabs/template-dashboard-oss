@@ -29,9 +29,8 @@ export const shipmentCarriers = [
   "DHL",
   "FedEx",
   "Estafeta",
-  "Paquetexpress",
+  "DOT",
   "UPS",
-  "Redpack",
 ]
 
 export const shipmentServices = ["Standard", "Express", "Next Day", "Economy"]
