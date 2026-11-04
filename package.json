@@ -21,6 +21,7 @@
     "@react-aria/datepicker": "^3.15.2",
     "@react-stately/datepicker": "^3.15.2",
     "@remixicon/react": "^4.6.0",
+    "@tremor/react": "^3.18.7",
     "@vis.gl/react-google-maps": "^1.10.2",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
