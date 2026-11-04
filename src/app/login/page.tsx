@@ -1,6 +1,9 @@
 'use client';
 
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { TextInput } from '@tremor/react';
+import { createClient } from '@/utils/supabase/client';
 
 const Logo = (props: React.SVGProps<SVGSVGElement>) => (
   <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
@@ -8,83 +11,102 @@ const Logo = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default function Example() {
+export default function LoginPage() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
+      setError(error.message);
+      setLoading(false);
+      return;
+    }
+
+    router.push('/');
+    router.refresh();
+  };
+
   return (
-    <>
-      <div className="flex min-h-screen flex-1 flex-col justify-center px-4 py-10 lg:px-6">
-        <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="flex items-center space-x-2.5">
-            <Logo
-              className="h-7 w-7 text-tremor-content-strong dark:text-dark-tremor-content-strong"
-              aria-hidden={true}
-            />
-            <p className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-              Company
-            </p>
-          </div>
-          <h3 className="mt-6 text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-            Sign in to your account
-          </h3>
-          <p className="mt-2 text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-            Don't have an account?{' '}
-            <a
-              href="#"
-              className="font-medium text-tremor-brand hover:text-tremor-brand-emphasis dark:text-dark-tremor-brand hover:dark:text-dark-tremor-brand-emphasis"
-            >
-              Sign up
-            </a>
-          </p>
-          <form action="#" method="post" className="mt-6 space-y-4">
-            <div>
-              <label
-                htmlFor="email"
-                className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
-              >
-                Email
-              </label>
-              <TextInput
-                type="email"
-                id="email"
-                name="email"
-                autoComplete="email"
-                placeholder="john@company.com"
-                className="mt-2"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="password"
-                className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
-              >
-                Password
-              </label>
-              <TextInput
-                type="password"
-                id="password"
-                name="password"
-                autoComplete="password"
-                placeholder="Password"
-                className="mt-2"
-              />
-            </div>
-            <button
-              type="submit"
-              className="mt-4 w-full whitespace-nowrap rounded-tremor-default bg-tremor-brand py-2 text-center text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-tremor-brand-emphasis dark:bg-dark-tremor-brand dark:text-dark-tremor-brand-inverted dark:shadow-dark-tremor-input dark:hover:bg-dark-tremor-brand-emphasis"
-            >
-              Sign in
-            </button>
-          </form>
-          <p className="mt-6 text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-            Forgot your password?{' '}
-            <a
-              href="#"
-              className="font-medium text-tremor-brand hover:text-tremor-brand-emphasis dark:text-dark-tremor-brand hover:dark:text-dark-tremor-brand-emphasis"
-            >
-              Reset password
-            </a>
+    <div className="flex min-h-screen flex-1 flex-col justify-center px-4 py-10 lg:px-6">
+      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+        <div className="flex items-center space-x-2.5">
+          <Logo
+            className="h-7 w-7 text-tremor-content-strong dark:text-dark-tremor-content-strong"
+            aria-hidden={true}
+          />
+          <p className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
+            Company
           </p>
         </div>
+        <h3 className="mt-6 text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
+          Sign in to your account
+        </h3>
+
+        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <div>
+            <label
+              htmlFor="email"
+              className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
+            >
+              Email
+            </label>
+            <TextInput
+              type="email"
+              id="email"
+              name="email"
+              autoComplete="email"
+              placeholder="john@company.com"
+              className="mt-2"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label
+              htmlFor="password"
+              className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
+            >
+              Password
+            </label>
+            <TextInput
+              type="password"
+              id="password"
+              name="password"
+              autoComplete="current-password"
+              placeholder="Password"
+              className="mt-2"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          {error && <p className="text-sm text-red-500">{error}</p>}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="mt-4 w-full whitespace-nowrap rounded-tremor-default bg-tremor-brand py-2 text-center text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-tremor-brand-emphasis disabled:opacity-60 dark:bg-dark-tremor-brand dark:text-dark-tremor-brand-inverted dark:shadow-dark-tremor-input dark:hover:bg-dark-tremor-brand-emphasis"
+          >
+            {loading ? 'Signing in...' : 'Sign in'}
+          </button>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
