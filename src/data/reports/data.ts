@@ -1,3 +1,4 @@
+import { createRandom, weightedPick } from "@/lib/random"
 import { addDays, format } from "date-fns"
 
 export type ReportOrderStatus = "shipped" | "pending" | "returned"
@@ -141,19 +142,10 @@ const states = [
   },
 ]
 
-const totalWeight = states.reduce((sum, state) => sum + state.weight, 0)
-
 export const reportStart = new Date(2026, 9, 1)
 export const reportEnd = new Date(2026, 9, 30)
 
 export const toDateKey = (date: Date) => format(date, "yyyy-MM-dd")
-
-const createRandom = (seed: number) => () => {
-  seed = (seed + 0x6d2b79f5) | 0
-  let t = Math.imul(seed ^ (seed >>> 15), 1 | seed)
-  t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
-  return ((t ^ (t >>> 14)) >>> 0) / 4294967296
-}
 
 const SPIKE_DAY = 7
 const reportDays = 30
@@ -169,9 +161,7 @@ const generateOrders = () => {
         : Math.round(45 + random() * 20 + Math.sin(day / 3) * 10)
 
     for (let i = 0; i < count; i++) {
-      let pick = random() * totalWeight
-      const state =
-        states.find((candidate) => (pick -= candidate.weight) < 0) ?? states[0]
+      const state = weightedPick(states, random)
       const city = state.cities[Math.floor(random() * state.cities.length)]
       const statusRoll = random()
 
@@ -198,8 +188,8 @@ const generateOrders = () => {
 
 export const reportOrders = generateOrders()
 
-export const filterReportOrders = (
-  orders: ReportOrder[],
+export const filterReportOrders = <T extends ReportOrder>(
+  orders: T[],
   from: Date | undefined,
   to: Date | undefined,
 ) => {

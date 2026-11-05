@@ -13,7 +13,7 @@ import { cx, focusRing } from "@/lib/utils"
 import {
   RiHome2Line,
   RiLinkM,
-  RiListCheck,
+  RiRadarLine,
   RiSettings5Line,
   RiGlobalLine,
   RiFolderChartLine,
@@ -30,7 +30,7 @@ import { usePathname } from "next/navigation"
 
 const navigation = [
   { name: "Overview", href: siteConfig.baseLinks.overview, icon: RiHome2Line },
-  { name: "Details", href: siteConfig.baseLinks.details, icon: RiListCheck },
+  { name: "Control Tower", href: siteConfig.baseLinks.controlTower, icon: RiRadarLine },
   { name: "Orders", href: siteConfig.baseLinks.orders, icon: RiFileListLine},
   { name: "Inventory", href: siteConfig.baseLinks.inventory, icon: RiBox3Line },
   { name: "Shipments", href: siteConfig.baseLinks.shipments, icon: RiTruckLine },

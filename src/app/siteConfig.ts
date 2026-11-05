@@ -13,7 +13,7 @@ export const siteConfig = {
     network: "/network",
     reports: "/reports",
     invoices: "/invoices",
-    details: "/details",
+    controlTower: "/control-tower",
     integrations: "/integrations",
     settings: "/settings",
   },
