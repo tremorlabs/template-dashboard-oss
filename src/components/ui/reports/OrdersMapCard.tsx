@@ -2,29 +2,13 @@
 
 import { Badge } from "@/components/Badge"
 import { Card } from "@/components/Card"
+import { LazyReportsMap as ReportsMap } from "@/components/ui/map/LazyMaps"
 import {
-  getOrdersByLocation,
-  type LocationView,
-  type ReportOrder,
-} from "@/data/reports/data"
+  LocationViewToggle,
+  useLocationSelection,
+} from "@/components/ui/reports/LocationViewToggle"
+import type { ReportOrder } from "@/data/reports/data"
 import { cx, focusRing } from "@/lib/utils"
-import dynamic from "next/dynamic"
-import React from "react"
-
-const ReportsMap = dynamic(
-  () => import("./ReportsMap").then((module) => module.ReportsMap),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-full w-full animate-pulse bg-gray-100 dark:bg-gray-900" />
-    ),
-  },
-)
-
-const views: { value: LocationView; label: string }[] = [
-  { value: "state", label: "State" },
-  { value: "city", label: "City" },
-]
 
 export function OrdersMapCard({
   orders,
@@ -33,50 +17,12 @@ export function OrdersMapCard({
   orders: ReportOrder[]
   className?: string
 }) {
-  const [view, setView] = React.useState<LocationView>("state")
-  const [selectedId, setSelectedId] = React.useState<string | null>(null)
-  const locations = React.useMemo(
-    () => getOrdersByLocation(orders, view),
-    [orders, view],
-  )
-
-  const changeView = (nextView: LocationView) => {
-    setView(nextView)
-    setSelectedId(null)
-  }
-  const toggleLocation = (id: string) =>
-    setSelectedId((current) => (current === id ? null : id))
+  const { view, changeView, locations, selectedId, toggleLocation } =
+    useLocationSelection(orders, "state")
 
   return (
     <Card className={cx("flex min-h-0 flex-col p-0", className)}>
-      <div className="flex items-center gap-3 px-4 py-2.5">
-        <h2 className="font-semibold text-gray-900 dark:text-gray-50">
-          Orders by
-        </h2>
-        <div
-          role="group"
-          aria-label="Group orders by"
-          className="inline-flex rounded-md bg-gray-100 p-0.5 dark:bg-gray-900"
-        >
-          {views.map((item) => (
-            <button
-              key={item.value}
-              type="button"
-              aria-pressed={view === item.value}
-              onClick={() => changeView(item.value)}
-              className={cx(
-                "rounded px-2.5 py-1 text-xs font-medium transition",
-                view === item.value
-                  ? "bg-indigo-600 text-white"
-                  : "text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50",
-                focusRing,
-              )}
-            >
-              {item.label}
-            </button>
-          ))}
-        </div>
-      </div>
+      <LocationViewToggle value={view} onChange={changeView} />
       <div className="flex flex-col border-t border-gray-200 md:h-96 md:flex-row xl:h-auto xl:min-h-0 xl:flex-1 dark:border-gray-800">
         <ul
           role="list"
