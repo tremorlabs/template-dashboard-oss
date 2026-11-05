@@ -1,8 +1,5 @@
 "use client"
 
-import { useRouter } from "next/navigation"
-import { createClient } from "@/utils/supabase/client"
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,21 +32,6 @@ export function DropdownUserProfile({
   children,
   align = "start",
 }: DropdownUserProfileProps) {
-  const router = useRouter()
-  const supabase = createClient()
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    router.push("/login")
-    router.refresh()
-  }
-
-  const [email, setEmail] = React.useState("")
-
-  React.useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? ""))
-  }, [])
-
   const [mounted, setMounted] = React.useState(false)
   const { theme, setTheme } = useTheme()
   React.useEffect(() => {
@@ -64,7 +46,7 @@ export function DropdownUserProfile({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent align={align}>
-          <DropdownMenuLabel>{email}</DropdownMenuLabel>
+          <DropdownMenuLabel>emma.stone@gmail.com</DropdownMenuLabel>
           <DropdownMenuGroup>
             <DropdownMenuSubMenu>
               <DropdownMenuSubMenuTrigger>Theme</DropdownMenuSubMenuTrigger>
@@ -135,7 +117,7 @@ export function DropdownUserProfile({
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={handleSignOut}>Sign out</DropdownMenuItem>
+            <DropdownMenuItem>Sign out</DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

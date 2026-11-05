@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { TextInput } from '@tremor/react';
 import { createClient } from '@/utils/supabase/client';
 
@@ -12,9 +11,6 @@ const Logo = (props: React.SVGProps<SVGSVGElement>) => (
 );
 
 export default function LoginPage() {
-  const router = useRouter();
-  const supabase = createClient();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -22,22 +18,26 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log("submit ejecutado");
     setLoading(true);
     setError(null);
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      window.location.href = "/overview";
+    } catch (err) {
+      setError("No se pudo conectar con el servidor");
+      console.error(err);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    router.push('/');
-    router.refresh();
   };
 
   return (
