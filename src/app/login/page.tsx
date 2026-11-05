@@ -46,9 +46,6 @@ export default function LoginPage() {
             height={32}
             priority
           />
-          <p className="font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong">
-            Company
-          </p>
         </div>
         <h3 className="mt-6 text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
           Sign in to your account
