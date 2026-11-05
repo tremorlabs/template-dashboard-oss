@@ -21,7 +21,9 @@ import {
   RiSunLine,
 } from "@remixicon/react"
 import { useTheme } from "next-themes"
+import { useRouter } from "next/navigation"
 import * as React from "react"
+import { createClient } from "@/utils/supabase/client"
 
 export type DropdownUserProfileProps = {
   children: React.ReactNode
@@ -33,20 +35,36 @@ export function DropdownUserProfile({
   align = "start",
 }: DropdownUserProfileProps) {
   const [mounted, setMounted] = React.useState(false)
+  const [email, setEmail] = React.useState<string>("")
   const { theme, setTheme } = useTheme()
+  const router = useRouter()
+
   React.useEffect(() => {
     setMounted(true)
+
+    const supabase = createClient()
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setEmail(user?.email ?? "")
+    })
   }, [])
+
+  const handleSignOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    router.push("/login")
+    router.refresh()
+  }
 
   if (!mounted) {
     return null
   }
+
   return (
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
         <DropdownMenuContent align={align}>
-          <DropdownMenuLabel>emma.stone@gmail.com</DropdownMenuLabel>
+          <DropdownMenuLabel>{email}</DropdownMenuLabel>
           <DropdownMenuGroup>
             <DropdownMenuSubMenu>
               <DropdownMenuSubMenuTrigger>Theme</DropdownMenuSubMenuTrigger>
@@ -117,7 +135,7 @@ export function DropdownUserProfile({
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>Sign out</DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleSignOut}>Sign out</DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
