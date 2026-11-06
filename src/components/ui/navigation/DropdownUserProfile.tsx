@@ -25,6 +25,7 @@ import { useRouter } from "next/navigation"
 import * as React from "react"
 import { createClient } from "@/utils/supabase/client"
 import { siteConfig } from "@/app/siteConfig"
+import Link from "next/link"
 
 export type DropdownUserProfileProps = {
   children: React.ReactNode
@@ -126,11 +127,9 @@ export function DropdownUserProfile({
                 aria-hidden="true"
               />
             </DropdownMenuItem>
-            {/* <DropdownMenuItem asChild>
-              <a href={siteConfig.baseLinks.profile} className="flex items-center justify-between w-full">
-                Profile
-              </a>
-            </DropdownMenuItem> */}
+            <DropdownMenuItem asChild>
+              <Link href={siteConfig.baseLinks.profile} className="flex items-center justify-between w-full">Profile</Link>
+            </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
