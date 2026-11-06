@@ -32,6 +32,7 @@ import {
   RiArrowRightDoubleLine,
   RiArrowRightSLine,
   RiArrowUpSFill,
+  RiDeleteBin6Line,
 } from "@remixicon/react"
 import React from "react"
 
@@ -332,7 +333,14 @@ export function InventoryTable({ items, onDelete }: InventoryTableProps) {
           </p>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="secondary" className="px-2 py-1.5">
+              <Button
+                variant="destructiveSecondary"
+                className="gap-1.5 px-2 py-1.5"
+              >
+                <RiDeleteBin6Line
+                  className="-ml-0.5 size-4 shrink-0"
+                  aria-hidden="true"
+                />
                 Delete product
                 {plural}
               </Button>
