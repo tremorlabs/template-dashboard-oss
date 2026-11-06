@@ -24,6 +24,7 @@ import { useTheme } from "next-themes"
 import { useRouter } from "next/navigation"
 import * as React from "react"
 import { createClient } from "@/utils/supabase/client"
+import { siteConfig } from "@/app/siteConfig"
 
 export type DropdownUserProfileProps = {
   children: React.ReactNode
@@ -125,12 +126,10 @@ export function DropdownUserProfile({
                 aria-hidden="true"
               />
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              Join Slack community
-              <RiArrowRightUpLine
-                className="mb-1 ml-1 size-2.5 shrink-0 text-gray-500"
-                aria-hidden="true"
-              />
+            <DropdownMenuItem asChild>
+              <a href={siteConfig.baseLinks.profile} className="flex items-center justify-between w-full">
+                Profile
+              </a>
             </DropdownMenuItem>
           </DropdownMenuGroup>
           <DropdownMenuSeparator />

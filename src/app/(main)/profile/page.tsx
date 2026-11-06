@@ -1,8 +1,69 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { Divider, TextInput } from '@tremor/react';
+import { createClient } from '@/utils/supabase/client';
 
 export default function Example() {
+  const [userId, setUserId] = useState<string | null>(null);
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{ type: 'ok' | 'error'; text: string } | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    const loadProfile = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      setUserId(user.id);
+      setEmail(user.email ?? '');
+
+      const { data } = await supabase
+        .from('profiles')
+        .select('first_name, last_name')
+        .eq('id', user.id)
+        .single();
+
+      setFirstName(data?.first_name ?? '');
+      setLastName(data?.last_name ?? '');
+      setLoading(false);
+    };
+
+    loadProfile();
+  }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!userId) return;
+
+    setSaving(true);
+    setMessage(null);
+
+    const supabase = createClient();
+    const { error } = await supabase
+      .from('profiles')
+      .update({ first_name: firstName.trim(), last_name: lastName.trim() })
+      .eq('id', userId);
+
+    setSaving(false);
+    setMessage(
+      error
+        ? { type: 'error', text: error.message }
+        : { type: 'ok', text: 'Changes saved' },
+    );
+  };
+
   return (
     <>
       <div className="sm:mx-auto sm:max-w-2xl">
@@ -12,7 +73,7 @@ export default function Example() {
         <p className="mt-1 text-tremor-default leading-6 text-tremor-content dark:text-dark-tremor-content">
           Update personal information used for account management and billing.
         </p>
-        <form action="#" method="post" className="mt-8">
+        <form onSubmit={handleSubmit} className="mt-8">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-6">
             <div className="col-span-full sm:col-span-3">
               <label
@@ -28,6 +89,9 @@ export default function Example() {
                 autoComplete="given-name"
                 placeholder="Emma"
                 className="mt-2 rounded-tremor-small"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                disabled={loading}
               />
             </div>
             <div className="col-span-full sm:col-span-3">
@@ -44,6 +108,9 @@ export default function Example() {
                 autoComplete="family-name"
                 placeholder="Crown"
                 className="mt-2 rounded-tremor-small"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                disabled={loading}
               />
             </div>
             <div className="col-span-full">
@@ -54,12 +121,13 @@ export default function Example() {
                 Email
               </label>
               <TextInput
-                type="text"
+                type="email"
                 id="email"
                 name="email"
                 autoComplete="email"
-                placeholder="emma@company.com"
-                className="mt-2 rounded-tremor-small"
+                className="mt-2 rounded-tremor-small opacity-70"
+                value={email}
+                readOnly
               />
             </div>
           </div>
@@ -168,6 +236,15 @@ export default function Example() {
             </div>
           </div>
           <Divider />
+          {message && (
+            <p
+              className={`mb-4 text-sm ${
+                message.type === 'ok' ? 'text-green-600' : 'text-red-500'
+              }`}
+            >
+              {message.text}
+            </p>
+          )}
           <div className="flex items-center justify-end space-x-4">
             <button
               type="button"
@@ -177,9 +254,10 @@ export default function Example() {
             </button>
             <button
               type="submit"
-              className="whitespace-nowrap rounded-tremor-small bg-tremor-brand px-4 py-2.5 text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-tremor-brand-emphasis dark:bg-dark-tremor-brand dark:text-dark-tremor-brand-inverted dark:shadow-dark-tremor-input dark:hover:bg-dark-tremor-brand-emphasis"
+              disabled={saving || loading}
+              className="whitespace-nowrap rounded-tremor-small bg-tremor-brand px-4 py-2.5 text-tremor-default font-medium text-tremor-brand-inverted shadow-tremor-input hover:bg-tremor-brand-emphasis disabled:opacity-60 dark:bg-dark-tremor-brand dark:text-dark-tremor-brand-inverted dark:shadow-dark-tremor-input dark:hover:bg-dark-tremor-brand-emphasis"
             >
-              Save settings
+              {saving ? 'Saving...' : 'Save settings'}
             </button>
           </div>
         </form>
