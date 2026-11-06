@@ -16,6 +16,7 @@ export const siteConfig = {
     controlTower: "/control-tower",
     integrations: "/integrations",
     settings: "/settings",
+    profile: "/profile",
   },
   externalLink: {
     blocks: "https://blocks.tremor.so/templates#dashboard",
