@@ -32,7 +32,6 @@ export async function updateSession(request: NextRequest) {
     const url = request.nextUrl.clone();
     url.pathname = path;
     const response = NextResponse.redirect(url);
-    // conserva las cookies refrescadas
     supabaseResponse.cookies.getAll().forEach((c) => response.cookies.set(c));
     return response;
   };
