@@ -116,16 +116,12 @@ export const WorkspacesDropdownDesktop = () => {
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
-          {isAdmin && (
-            <>
-              <DropdownMenuSeparator />
-              <ModalAddWorkspace
-                onSelect={handleDialogItemSelect}
-                onOpenChange={handleDialogItemOpenChange}
-                itemName="Add workspace"
-              />
-            </>
-          )}
+          <DropdownMenuSeparator />
+          <ModalAddWorkspace
+            onSelect={handleDialogItemSelect}
+            onOpenChange={handleDialogItemOpenChange}
+            itemName="Add workspace"
+          />
         </DropdownMenuContent>
       </DropdownMenu>
     </>
@@ -137,7 +133,6 @@ export const WorkspacesDropdownMobile = () => {
   const [hasOpenDialog, setHasOpenDialog] = React.useState(false)
   const dropdownTriggerRef = React.useRef<null | HTMLButtonElement>(null)
   const focusRef = React.useRef<null | HTMLButtonElement>(null)
-  const isAdmin = useIsAdmin()
 
   const handleDialogItemSelect = () => {
     focusRef.current = dropdownTriggerRef.current
@@ -206,16 +201,12 @@ export const WorkspacesDropdownMobile = () => {
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
-          {isAdmin && (
-            <>
-              <DropdownMenuSeparator />
-              <ModalAddWorkspace
-                onSelect={handleDialogItemSelect}
-                onOpenChange={handleDialogItemOpenChange}
-                itemName="Add workspace"
-              />
-            </>
-          )}
+          <DropdownMenuSeparator />
+          <ModalAddWorkspace
+            onSelect={handleDialogItemSelect}
+            onOpenChange={handleDialogItemOpenChange}
+            itemName="Add workspace"
+          />
         </DropdownMenuContent>
       </DropdownMenu>
     </>
