@@ -4,7 +4,7 @@ export default function Layout({
   children: React.ReactNode
 }>) {
   return (
-    <div className="min-h-screen w-full bg-tremor-background dark:bg-dark-tremor-background">
+    <div className="min-h-screen w-full">
       {children}
     </div>
   )
