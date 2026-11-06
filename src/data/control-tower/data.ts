@@ -1,6 +1,6 @@
 import { reportOrders, toDateKey, type ReportOrder } from "@/data/reports/data"
 import { createRandom, weightedPick } from "@/lib/random"
-import { addDays, parseISO } from "date-fns"
+import { addDays, parseISO, subDays } from "date-fns"
 
 export const channels = [
   { value: "mercado-libre", label: "Mercado Libre", weight: 38 },
@@ -68,9 +68,39 @@ export const summarizeOrders = (orders: ControlTowerOrder[]) => {
   }
   return {
     orders: orders.length,
+    shipped,
+    onTime,
     fillRate: unitsOrdered ? unitsShipped / unitsOrdered : 0,
     sla: shipped ? onTime / shipped : 0,
     exceptions,
+  }
+}
+
+export const WINDOW_DAYS = 7
+
+// Last 7 days vs. the 7 before; null without enough history
+export const summarizeWeeks = (orders: ControlTowerOrder[]) => {
+  if (!orders.length) return null
+  let first = orders[0].created
+  let last = first
+  for (const { created } of orders) {
+    if (created < first) first = created
+    if (created > last) last = created
+  }
+  const end = parseISO(last)
+  const currentStart = toDateKey(subDays(end, WINDOW_DAYS - 1))
+  const previousStart = toDateKey(subDays(end, WINDOW_DAYS * 2 - 1))
+  if (first > previousStart) return null
+  return {
+    current: summarizeOrders(
+      orders.filter((order) => order.created >= currentStart),
+    ),
+    previous: summarizeOrders(
+      orders.filter(
+        (order) =>
+          order.created >= previousStart && order.created < currentStart,
+      ),
+    ),
   }
 }
 

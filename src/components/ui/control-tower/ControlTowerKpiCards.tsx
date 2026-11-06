@@ -1,14 +1,12 @@
 import { Card } from "@/components/Card"
 import {
   summarizeOrders,
+  summarizeWeeks,
+  WINDOW_DAYS,
   type ControlTowerOrder,
 } from "@/data/control-tower/data"
-import { toDateKey } from "@/data/reports/data"
 import { cx } from "@/lib/utils"
-import { parseISO, subDays } from "date-fns"
 import React from "react"
-
-const WINDOW_DAYS = 7
 
 const countFormatter = new Intl.NumberFormat("en-US")
 const percentFormatter = new Intl.NumberFormat("en-US", {
@@ -32,31 +30,6 @@ const relativeChange = (current: number, previous: number) =>
 
 const pointsChange = (current: number, previous: number) =>
   `${pointsFormatter.format((current - previous) * 100)} pt`
-
-const summarizeWeeks = (orders: ControlTowerOrder[]) => {
-  if (!orders.length) return null
-  let first = orders[0].created
-  let last = first
-  for (const { created } of orders) {
-    if (created < first) first = created
-    if (created > last) last = created
-  }
-  const end = parseISO(last)
-  const currentStart = toDateKey(subDays(end, WINDOW_DAYS - 1))
-  const previousStart = toDateKey(subDays(end, WINDOW_DAYS * 2 - 1))
-  if (first > previousStart) return null
-  return {
-    current: summarizeOrders(
-      orders.filter((order) => order.created >= currentStart),
-    ),
-    previous: summarizeOrders(
-      orders.filter(
-        (order) =>
-          order.created >= previousStart && order.created < currentStart,
-      ),
-    ),
-  }
-}
 
 const kpis: {
   label: string
@@ -133,7 +106,7 @@ export function ControlTowerKpiCards({
                 </span>
               )}
             </div>
-            <dd className="mt-1 text-3xl font-semibold tabular-nums text-gray-900 dark:text-gray-50">
+            <dd className="mt-1 text-2xl font-semibold tabular-nums text-gray-900 dark:text-gray-50">
               {kpi.format(summary[kpi.key])}
             </dd>
           </Card>

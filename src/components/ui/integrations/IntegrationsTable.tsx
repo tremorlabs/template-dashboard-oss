@@ -3,6 +3,16 @@
 import { Badge } from "@/components/Badge"
 import { Button } from "@/components/Button"
 import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/Dialog"
+import {
   Table,
   TableBody,
   TableCell,
@@ -13,6 +23,13 @@ import {
 } from "@/components/Table"
 import { integrationStatuses, type Integration } from "@/data/integrations/data"
 import { cx } from "@/lib/utils"
+import {
+  RiDeleteBin6Line,
+  RiEyeLine,
+  RiFileList3Line,
+  RiPencilLine,
+  type RemixiconComponentType,
+} from "@remixicon/react"
 import React from "react"
 
 const columns: {
@@ -39,12 +56,26 @@ const columns: {
   },
 ]
 
-const actions = ["Action 1", "Action 2", "Action 3", "Action 4"]
+export type IntegrationAction = "view" | "requests" | "edit"
+
+const actions: {
+  value: IntegrationAction
+  label: string
+  icon: RemixiconComponentType
+}[] = [
+  { value: "view", label: "View integration", icon: RiEyeLine },
+  { value: "requests", label: "Request status", icon: RiFileList3Line },
+  { value: "edit", label: "Edit integration", icon: RiPencilLine },
+]
 
 export function IntegrationsTable({
   integrations,
+  onAction,
+  onDelete,
 }: {
   integrations: Integration[]
+  onAction: (action: IntegrationAction, integration: Integration) => void
+  onDelete: (id: string) => void
 }) {
   const [selectedId, setSelectedId] = React.useState<string | null>(null)
   const selected = integrations.find(({ id }) => id === selectedId)
@@ -106,10 +137,69 @@ export function IntegrationsTable({
           </p>
           <div className="flex flex-wrap items-center gap-2">
             {actions.map((action) => (
-              <Button key={action} variant="secondary" className="px-2 py-1.5">
-                {action}
+              <Button
+                key={action.value}
+                variant="secondary"
+                className="gap-1.5 px-2 py-1.5"
+                onClick={() => onAction(action.value, selected)}
+              >
+                <action.icon
+                  className="-ml-0.5 size-4 shrink-0"
+                  aria-hidden="true"
+                />
+                {action.label}
               </Button>
             ))}
+            <span
+              className="h-5 w-px bg-gray-200 dark:bg-gray-800"
+              aria-hidden="true"
+            />
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  variant="destructiveSecondary"
+                  className="gap-1.5 px-2 py-1.5"
+                >
+                  <RiDeleteBin6Line
+                    className="-ml-0.5 size-4 shrink-0"
+                    aria-hidden="true"
+                  />
+                  Delete integration
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md">
+                <DialogHeader>
+                  <DialogTitle>Delete {selected.name}?</DialogTitle>
+                  <DialogDescription className="text-sm">
+                    This removes the {selected.name} ({selected.label})
+                    integration and stops all its requests. This can&apos;t be
+                    undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter className="mt-6">
+                  <DialogClose asChild>
+                    <Button
+                      variant="secondary"
+                      className="mt-2 w-full sm:mt-0 sm:w-fit"
+                    >
+                      Cancel
+                    </Button>
+                  </DialogClose>
+                  <DialogClose asChild>
+                    <Button
+                      variant="destructive"
+                      className="w-full sm:w-fit"
+                      onClick={() => {
+                        onDelete(selected.id)
+                        setSelectedId(null)
+                      }}
+                    >
+                      Delete integration
+                    </Button>
+                  </DialogClose>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       )}

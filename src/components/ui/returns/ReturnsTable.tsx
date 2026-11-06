@@ -43,6 +43,8 @@ import {
   RiArrowRightDoubleLine,
   RiArrowRightSLine,
   RiArrowUpSFill,
+  RiDeleteBin6Line,
+  RiPencilLine,
 } from "@remixicon/react"
 import { format } from "date-fns"
 import React from "react"
@@ -346,7 +348,11 @@ export function ReturnsTable({
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="px-2 py-1.5">
+                <Button className="gap-1.5 px-2 py-1.5">
+                  <RiPencilLine
+                    className="-ml-0.5 size-4 shrink-0"
+                    aria-hidden="true"
+                  />
                   Edit return
                   {plural}
                 </Button>
@@ -365,9 +371,20 @@ export function ReturnsTable({
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
+            <span
+              className="h-5 w-px bg-gray-200 dark:bg-gray-800"
+              aria-hidden="true"
+            />
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="secondary" className="px-2 py-1.5">
+                <Button
+                  variant="destructiveSecondary"
+                  className="gap-1.5 px-2 py-1.5"
+                >
+                  <RiDeleteBin6Line
+                    className="-ml-0.5 size-4 shrink-0"
+                    aria-hidden="true"
+                  />
                   Delete return
                   {plural}
                 </Button>
