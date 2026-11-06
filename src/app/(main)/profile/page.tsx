@@ -99,7 +99,6 @@ export default function Example() {
                 id="first-name"
                 name="first-name"
                 autoComplete="given-name"
-                placeholder="Emma"
                 className="mt-2 rounded-tremor-small"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -118,7 +117,6 @@ export default function Example() {
                 id="last-name"
                 name="last-name"
                 autoComplete="family-name"
-                placeholder="Crown"
                 className="mt-2 rounded-tremor-small"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}

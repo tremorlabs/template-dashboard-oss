@@ -9,13 +9,13 @@ import { createClient } from "@/utils/supabase/client"
 import { DropdownUserProfile } from "./DropdownUserProfile"
 
 export const UserProfileDesktop = () => {
-  const [displayName, setDisplayName] = React.useState<string>("Cargando...")
+  const [displayName, setDisplayName] = React.useState<string>("Loading...")
   const [initials, setInitials] = React.useState<string>("")
 
   React.useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
-      const name = user?.user_metadata?.display_name ?? user?.email ?? "Usuario"
+      const name = user?.user_metadata?.display_name ?? user?.email ?? "User"
       setDisplayName(name)
 
       const initialsText = name
@@ -62,7 +62,7 @@ export const UserProfileMobile = () => {
   React.useEffect(() => {
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
-      const name = user?.user_metadata?.display_name ?? user?.email ?? "Usuario"
+      const name = user?.user_metadata?.display_name ?? user?.email ?? "User"
       const initialsText = name
         .split(" ")
         .map((n: string) => n[0])
