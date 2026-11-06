@@ -14,6 +14,7 @@ import { RiArrowRightSLine, RiExpandUpDownLine } from "@remixicon/react"
 import React from "react"
 import { AlmatonIcon } from "../icons/AlmatonLogo"
 import { ModalAddWorkspace } from "./ModalAddWorkspace"
+import { useIsAdmin } from "@/hooks/useIsAdmin"
 
 const workspaces = [
   {
@@ -41,6 +42,7 @@ export const WorkspacesDropdownDesktop = () => {
   const [hasOpenDialog, setHasOpenDialog] = React.useState(false)
   const dropdownTriggerRef = React.useRef<null | HTMLButtonElement>(null)
   const focusRef = React.useRef<null | HTMLButtonElement>(null)
+  const isAdmin = useIsAdmin()
 
   const handleDialogItemSelect = () => {
     focusRef.current = dropdownTriggerRef.current
@@ -114,12 +116,16 @@ export const WorkspacesDropdownDesktop = () => {
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <ModalAddWorkspace
-            onSelect={handleDialogItemSelect}
-            onOpenChange={handleDialogItemOpenChange}
-            itemName="Add workspace"
-          />
+          {isAdmin && (
+            <>
+              <DropdownMenuSeparator />
+              <ModalAddWorkspace
+                onSelect={handleDialogItemSelect}
+                onOpenChange={handleDialogItemOpenChange}
+                itemName="Add workspace"
+              />
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
@@ -131,6 +137,7 @@ export const WorkspacesDropdownMobile = () => {
   const [hasOpenDialog, setHasOpenDialog] = React.useState(false)
   const dropdownTriggerRef = React.useRef<null | HTMLButtonElement>(null)
   const focusRef = React.useRef<null | HTMLButtonElement>(null)
+  const isAdmin = useIsAdmin()
 
   const handleDialogItemSelect = () => {
     focusRef.current = dropdownTriggerRef.current
@@ -199,12 +206,16 @@ export const WorkspacesDropdownMobile = () => {
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
-          <DropdownMenuSeparator />
-          <ModalAddWorkspace
-            onSelect={handleDialogItemSelect}
-            onOpenChange={handleDialogItemOpenChange}
-            itemName="Add workspace"
-          />
+          {isAdmin && (
+            <>
+              <DropdownMenuSeparator />
+              <ModalAddWorkspace
+                onSelect={handleDialogItemSelect}
+                onOpenChange={handleDialogItemOpenChange}
+                itemName="Add workspace"
+              />
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </>
