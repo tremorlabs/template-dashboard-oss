@@ -36,72 +36,70 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-1 flex-col justify-center px-4 py-10 lg:px-6">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="flex items-center space-x-2.5">
-          <Image
-            src="/images/logo.svg"
-            alt="Logo Almaton"
-            width={120}
-            height={32}
-            priority
+    <div className="sm:mx-auto sm:w-full sm:max-w-md pt-12">
+      <div className="flex items-center space-x-2.5">
+        <Image
+          src="/images/logo.svg"
+          alt="Logo Almaton"
+          width={120}
+          height={32}
+          priority
+        />
+      </div>
+      <h3 className="mt-6 text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
+        Sign in to your account
+      </h3>
+
+      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <div>
+          <label
+            htmlFor="email"
+            className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
+          >
+            Email
+          </label>
+          <TextInput
+            type="email"
+            id="email"
+            name="email"
+            autoComplete="email"
+            placeholder="john@company.com"
+            className="mt-2"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
           />
         </div>
-        <h3 className="mt-6 text-tremor-title font-semibold text-tremor-content-strong dark:text-dark-tremor-content-strong">
-          Sign in to your account
-        </h3>
-
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-          <div>
-            <label
-              htmlFor="email"
-              className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
-            >
-              Email
-            </label>
-            <TextInput
-              type="email"
-              id="email"
-              name="email"
-              autoComplete="email"
-              placeholder="john@company.com"
-              className="mt-2"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
-            >
-              Password
-            </label>
-            <TextInput
-              type="password"
-              id="password"
-              name="password"
-              autoComplete="current-password"
-              placeholder="Password"
-              className="mt-2"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
-
-          {error && <p className="text-sm text-red-500">{error}</p>}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-sm transition-all duration-100 ease-in-out disabled:pointer-events-none disabled:shadow-none outline outline-offset-2 outline-0 focus-visible:outline-2 outline-blue-500 dark:outline-blue-500 border-transparent text-white dark:text-white bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 disabled:bg-blue-300 disabled:text-white disabled:dark:bg-blue-800 disabled:dark:text-blue-400 mt-4 w-full"
+        <div>
+          <label
+            htmlFor="password"
+            className="text-tremor-default font-medium text-tremor-content-strong dark:text-dark-tremor-content-strong"
           >
-            {loading ? 'Signing in...' : 'Sign in'}
-          </button>
-        </form>
-      </div>
+            Password
+          </label>
+          <TextInput
+            type="password"
+            id="password"
+            name="password"
+            autoComplete="current-password"
+            placeholder="Password"
+            className="mt-2"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+
+        {error && <p className="text-sm text-red-500">{error}</p>}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-sm transition-all duration-100 ease-in-out disabled:pointer-events-none disabled:shadow-none outline outline-offset-2 outline-0 focus-visible:outline-2 outline-blue-500 dark:outline-blue-500 border-transparent text-white dark:text-white bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 disabled:bg-blue-300 disabled:text-white disabled:dark:bg-blue-800 disabled:dark:text-blue-400 mt-4 w-full"
+        >
+          {loading ? 'Signing in...' : 'Sign in'}
+        </button>
+      </form>
     </div>
   );
 }
