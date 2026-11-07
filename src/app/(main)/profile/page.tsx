@@ -6,7 +6,6 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import {
   Dialog,
-  DialogTrigger,
   DialogContent,
   DialogHeader,
   DialogTitle,
@@ -24,6 +23,13 @@ export default function Example() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ type: 'ok' | 'error'; text: string } | null>(null);
+  const [initialFirstName, setInitialFirstName] = useState('');
+  const [initialLastName, setInitialLastName] = useState('');
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  const isDirty =
+    firstName.trim() !== initialFirstName ||
+    lastName.trim() !== initialLastName;
 
   useEffect(() => {
     const supabase = createClient();
@@ -47,8 +53,13 @@ export default function Example() {
         .eq('id', user.id)
         .single();
 
-      setFirstName(data?.first_name ?? '');
-      setLastName(data?.last_name ?? '');
+      const first = data?.first_name ?? '';
+      const last = data?.last_name ?? '';
+
+      setFirstName(first);
+      setLastName(last);
+      setInitialFirstName(first);
+      setInitialLastName(last);
       setLoading(false);
     };
 
@@ -261,18 +272,19 @@ export default function Example() {
             </p>
           )}
           <div className="flex items-center justify-end space-x-4">
-            <Dialog>
-              <DialogTrigger asChild>
-                <button
-                  type="button"
-                  className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-sm transition-all duration-100 ease-in-out disabled:pointer-events-none disabled:shadow-none outline outline-offset-2 outline-0 focus-visible:outline-2 outline-blue-500 dark:outline-blue-500 border-gray-300 dark:border-gray-800 text-gray-900 dark:text-gray-50 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900/60 disabled:text-gray-400 disabled:dark:text-gray-600"
-                >
-                  Cancel
-                </button>
-              </DialogTrigger>
+            <button
+              type="button"
+              onClick={() => (isDirty ? setDialogOpen(true) : router.back())}
+              className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-sm transition-all duration-100 ease-in-out disabled:pointer-events-none disabled:shadow-none outline outline-offset-2 outline-0 focus-visible:outline-2 outline-blue-500 dark:outline-blue-500 border-gray-300 dark:border-gray-800 text-gray-900 dark:text-gray-50 bg-white dark:bg-gray-950 hover:bg-gray-50 dark:hover:bg-gray-900/60 disabled:text-gray-400 disabled:dark:text-gray-600"
+            >
+              Cancel
+            </button>
+
+            <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Discard changes?</DialogTitle>
+                  <Divider className="my-5" />
                   <DialogDescription>
                     If you leave now, the unsaved changes will be lost and you will return to the previous page.
                   </DialogDescription>
@@ -296,6 +308,14 @@ export default function Example() {
                 </DialogFooter>
               </DialogContent>
             </Dialog>
+
+            <button
+              type="submit"
+              disabled={saving || loading || !isDirty}
+              className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-sm transition-all duration-100 ease-in-out disabled:pointer-events-none disabled:shadow-none outline outline-offset-2 outline-0 focus-visible:outline-2 outline-blue-500 dark:outline-blue-500 border-transparent text-white dark:text-white bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 disabled:bg-blue-300 disabled:text-white disabled:dark:bg-blue-800 disabled:dark:text-blue-400"
+            >
+              {saving ? 'Saving...' : 'Save settings'}
+            </button>
 
             <button
               type="submit"
