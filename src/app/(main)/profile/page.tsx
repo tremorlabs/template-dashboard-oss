@@ -316,14 +316,6 @@ export default function Example() {
             >
               {saving ? 'Saving...' : 'Save settings'}
             </button>
-
-            <button
-              type="submit"
-              disabled={saving || loading}
-              className="relative inline-flex items-center justify-center whitespace-nowrap rounded-md border px-3 py-2 text-center text-sm font-medium shadow-sm transition-all duration-100 ease-in-out disabled:pointer-events-none disabled:shadow-none outline outline-offset-2 outline-0 focus-visible:outline-2 outline-blue-500 dark:outline-blue-500 border-transparent text-white dark:text-white bg-blue-500 dark:bg-blue-500 hover:bg-blue-600 dark:hover:bg-blue-600 disabled:bg-blue-300 disabled:text-white disabled:dark:bg-blue-800 disabled:dark:text-blue-400"
-            >
-              {saving ? 'Saving...' : 'Save settings'}
-            </button>
           </div>
         </form>
       </div>
