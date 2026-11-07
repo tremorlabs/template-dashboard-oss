@@ -67,6 +67,11 @@ export default function Example() {
       .from('profiles')
       .update({ first_name: firstName.trim(), last_name: lastName.trim() })
       .eq('id', userId);
+    
+    if(!error) {
+      window.location.reload();
+      return;
+    }
 
     setSaving(false);
     setMessage(

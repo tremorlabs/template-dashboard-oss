@@ -36,7 +36,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="sm:mx-auto sm:w-full sm:max-w-md pt-12">
+    <div className="sm:mx-auto sm:w-full sm:max-w-md pt-24">
       <div className="flex items-center space-x-2.5">
         <Image
           src="/images/logo.svg"
